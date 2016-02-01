@@ -1,0 +1,56 @@
+// Binary Tree : C/C++ style coded
+// BFS 
+#include <iostream>
+#include <queue>
+using namespace std;
+
+struct TNode
+{
+    TNode * left;
+    TNode * right;
+    int data;
+};
+
+TNode * newNode(const int &data)
+{
+    TNode* tmp = new TNode;
+    tmp->data = data;
+    tmp->left = nullptr;
+    tmp->right = nullptr;
+    return tmp;
+}
+
+void printBFS(TNode * root)
+{
+    queue<TNode*> qt;
+
+    qt.push(root);
+
+    while (!qt.empty())
+    {
+        TNode * tmp = qt.front();
+        printf(" %d ", tmp->data);
+        qt.pop();
+        if (tmp->left != NULL)
+            qt.push(tmp->left);
+        if (tmp->left != NULL)
+            qt.push(tmp->right);
+    }
+}
+
+/* Diver function to test above function */
+int main()
+{
+    TNode * root = newNode(1);
+    root->left = newNode(2);
+    root->right = newNode(3);
+    root->left->left = newNode(4);
+    root->left->right = newNode(5);
+
+    // BFS traversal
+    printf("\n BFS :");
+    printBFS(root);
+    printf("\n");
+
+    return 0;
+}
