@@ -1,0 +1,76 @@
+// Binary Tree : C style coded
+#include <iostream>
+using namespace std;
+
+struct TNode
+{
+    TNode * left;
+    TNode * right;
+    int data;
+};
+
+TNode * newNode(const int &data)
+{
+    TNode* tmp = new TNode;
+    tmp->data = data;
+    tmp->left = nullptr;
+    tmp->right = nullptr;
+    return tmp;
+}
+
+void printPreOrder(const TNode* node)
+{
+    if (node == NULL)
+        return;
+
+    printf(" %d ", node->data);
+    printPreOrder(node->left);
+    printPreOrder(node->right);
+}
+
+void printInOrder(const TNode* node)
+{
+    if (node == NULL)
+        return;
+
+    printInOrder(node->left);
+    printf(" %d ", node->data);
+    printInOrder(node->right);
+}
+
+void printPostOrder(const TNode* node)
+{
+    if (node == NULL)
+        return;
+
+    printPostOrder(node->left);
+    printPostOrder(node->right);
+    printf(" %d ", node->data);
+}
+
+/* Diver function to test above function */
+int main()
+{
+    TNode * root = newNode(1);
+    root->left = newNode(2);
+    root->right = newNode(3);
+    root->left->left = newNode(4);
+    root->left->right = newNode(5);
+
+    // Preorder
+    printf("\n PreOrder :");
+    printPreOrder(root);
+    printf("\n");
+
+    // Inorder
+    printf("\n InOrder :");
+    printInOrder(root);
+    printf("\n");
+
+    // PostOrder
+    printf("\n PostOrder :");
+    printPostOrder(root);
+    printf("\n");
+
+    return 0;
+}
