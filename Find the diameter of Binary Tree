@@ -1,0 +1,57 @@
+// Binary Tree : C/C++ style coded
+// Find the diameter of Binary Tree
+#include <iostream>
+#include <queue>
+using namespace std;
+
+struct TNode
+{
+    TNode * left;
+    TNode * right;
+    int data;
+};
+
+TNode * newNode(const int &data)
+{
+    TNode* tmp = new TNode;
+    tmp->data = data;
+    tmp->left = nullptr;
+    tmp->right = nullptr;
+    return tmp;
+}
+
+int heightOfTree(TNode * node)
+{
+    if (node == NULL)
+        return 0;
+    else
+        return (1 + max(heightOfTree(node->left), heightOfTree(node->right)));
+}
+
+int diameterOfTree(TNode * node)
+{
+    if (node == 0)
+        return 0;
+
+    int lheight = heightOfTree(node->left);
+    int rheight = heightOfTree(node->right);
+
+    int ldiameter = diameterOfTree(node->left);
+    int rdiameter = diameterOfTree(node->right);
+
+    return max(lheight + rheight + 1, max(ldiameter, rdiameter));
+}
+
+/* Diver function to test above function */
+int main()
+{
+    TNode * root = newNode(1);
+    root->left = newNode(2);
+    root->right = newNode(3);
+    root->left->left = newNode(4);
+    root->left->right = newNode(5);
+
+    printf("Height of Binary Tree is %d \n", diameterOfTree(root));
+
+    return 0;
+}
