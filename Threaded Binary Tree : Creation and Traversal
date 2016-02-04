@@ -1,0 +1,109 @@
+// Threaded Binary Tree
+
+#include <iostream>
+#define MAX_VALUE 65536
+
+using namespace std;
+
+struct TNode
+{
+    int data;
+    TNode * right, *left;
+    bool leftThread, rightThread;
+};
+
+class ThreadedBTree
+{
+private:
+    TNode * root;
+
+public:
+    ThreadedBTree();
+    void insertNode(int data);
+    void inorder();
+};
+
+ThreadedBTree::ThreadedBTree()
+{
+    root = new TNode();
+    root->left = root->right = root;
+    root->data = MAX_VALUE;
+    root->leftThread = true;
+}
+
+void ThreadedBTree::insertNode(int data)
+{
+    TNode * tmp = root;
+    while (1)
+    {
+        if (tmp->data > data)
+        {
+            if (tmp->leftThread)
+                break;
+            tmp = tmp->left;
+        }
+        else if (tmp->data < data)
+        {
+            if (tmp->rightThread)
+                break;
+            tmp = tmp->right;
+        }
+        else
+        {
+            return;
+        }
+    }
+
+    TNode * newNode = new TNode;
+    newNode->data = data;
+    newNode->leftThread = newNode->rightThread = true;
+
+    if (tmp->data < data)
+    {
+        newNode->left = tmp;
+        newNode->right = tmp->right;
+        tmp->right = newNode;
+        tmp->rightThread = false;
+    }
+    else
+    {
+        newNode->left = tmp->left;
+        newNode->right = tmp;
+        tmp->left = newNode;
+        tmp->leftThread = false;
+    }
+}
+
+void ThreadedBTree::inorder()
+{
+    TNode *temp = root;
+    TNode *aux;
+    while (1){
+        aux = temp;
+        temp = temp->right;
+        if (!aux->rightThread)
+        {
+            while (!temp->leftThread)
+                temp = temp->left;
+        }
+        if (temp == root)
+            break;
+        std::cout << temp->data << "\t";
+    }
+}
+
+int main()
+{
+    ThreadedBTree tree;
+    tree.insertNode(6);
+    tree.insertNode(4);
+    tree.insertNode(8);
+    tree.insertNode(3);
+    tree.insertNode(5);
+    tree.insertNode(7);
+    tree.insertNode(9);
+
+    tree.inorder();
+
+    return 0;
+}
