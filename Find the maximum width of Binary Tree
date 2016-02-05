@@ -1,0 +1,72 @@
+// Binary Tree : Find the maximum width of Binary Tree
+/* Logic:
+ 1. traverse the Tree in level order and count no. of nodes at each level
+ 2. keep the max value of all node count
+ 3. return max
+*/
+#include <iostream>
+#include <queue>
+using namespace std;
+
+struct TNode
+{
+    TNode * left;
+    TNode * right;
+    int data;
+};
+
+TNode * newNode(const int &data)
+{
+    TNode* tmp = new TNode;
+    tmp->data = data;
+    tmp->left = nullptr;
+    tmp->right = nullptr;
+    return tmp;
+}
+
+int getMaxWidth(TNode * root)
+{
+    int sizeofQueue = 0, max = 0;
+    queue<TNode*> qt;
+
+    if (root == nullptr)
+        return 0;
+
+    qt.push(root);
+    while (!qt.empty())
+    {
+        sizeofQueue = qt.size();
+        if (sizeofQueue > max)
+        {
+            max = sizeofQueue;
+        }
+        while (sizeofQueue > 0)
+        {
+            TNode * tmp = qt.front();
+            qt.pop();
+            if (tmp->left) qt.push(tmp->left);
+            if (tmp->right) qt.push(tmp->right);
+            sizeofQueue--;
+        }
+    }
+
+    return max;
+}
+
+/* Diver function to test above function */
+int main()
+{
+    TNode * root = newNode(1);
+    root->left = newNode(2);
+    root->right = newNode(3);
+    root->left->left = newNode(4);
+    root->left->right = newNode(5);
+    root->right->right = newNode(8);
+    root->right->right->left = newNode(6);
+    root->right->right->right = newNode(7);
+
+    // width of Binary Tree
+    printf("Maximum width of Binary Tree is %d \n", getMaxWidth(root));
+
+    return 0;
+}
