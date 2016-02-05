@@ -1,0 +1,44 @@
+// Print Ancestors of a given node in Binary Tree
+#include <iostream>
+using namespace std;
+
+typedef struct node
+{
+    int data;
+    struct node* left;
+    struct node* right;
+} TNode;
+
+
+TNode* newNode(int data)
+{
+    TNode* node = new TNode;
+    node->data = data;
+    node->left = NULL;
+    node->right = NULL;
+
+    return(node);
+}
+
+void printAncestors(TNode* root, int value)
+{
+    if (root == NULL)
+        return;
+
+}
+
+/* Driver program to test above functions*/
+int main()
+{
+
+    TNode *root = newNode(1);
+    root->left = newNode(2);
+    root->right = newNode(3);
+    root->left->left = newNode(4);
+    root->left->right = newNode(5);
+    root->left->left->left = newNode(7);
+
+    printAncestors(root, 7);
+
+    return 0;
+}
