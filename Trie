@@ -1,0 +1,112 @@
+// Trie data structure in C++ 11
+
+#include <iostream>
+#include <stdlib.h>
+#include <string>
+
+#define ARRAY_SIZE(a) sizeof(a)/sizeof(a[0])
+#define ALPHABET_SIZE (26)
+#define CHAR_TO_INDX(c) ((int)c - (int)'a')
+
+// Trie node
+struct TrieNode
+{
+    int value;
+    TrieNode * children[ALPHABET_SIZE];
+};
+
+struct Trie
+{
+    TrieNode * root;
+    int count;
+};
+
+TrieNode* getNode()
+{
+    TrieNode * pNode = new TrieNode;
+
+    if (pNode)
+    {
+        int i = int();
+        pNode->value = 0;
+        for ( i = 0; i < ALPHABET_SIZE; i++)
+            pNode->children[i] = NULL;
+    }
+    return pNode;
+}
+
+void Initialize(Trie * pTrie)
+{
+    pTrie->root = getNode();
+    pTrie->count = 0;
+}
+
+void insert(Trie* pTrie, char key[])
+{
+    int level;
+    int length = strlen(key);
+    int index;
+    TrieNode * pCrawl;
+
+    pTrie->count++;
+    pCrawl = pTrie->root;
+
+    for (level = 0; level < length; level++)
+    {
+        index = CHAR_TO_INDX(key[level]);
+        if (!pCrawl->children[index])
+        {
+            pCrawl->children[index] = getNode();
+        }
+
+        pCrawl = pCrawl->children[index];
+    }
+
+    pCrawl->value = pTrie->count;
+}
+
+int Search(Trie *pTrie, char key[])
+{
+    int level;
+    int length = strlen(key);
+    int index;
+    TrieNode * pCrawl = pTrie->root;
+
+    for (level = 0; level < length; level++)
+    {
+        index = CHAR_TO_INDX(key[level]);
+
+        if (!pCrawl->children[index])
+        {
+            return 0;
+        }
+
+        pCrawl = pCrawl->children[index];
+    }
+
+}
+
+int main()
+{
+    // Input keys (use only 'a' through 'z' and lower case)
+    char keys[][7] = { "the", "a", "there", "answer", "any", "by", "bye", "their" };
+    Trie trie;
+
+    char output[][32] = { "Not present in trie", "Present in trie" };
+
+    Initialize(&trie);
+
+    // Construct trie
+    for (int i = 0; i < ARRAY_SIZE(keys); i++)
+    {
+        insert(&trie, keys[i]);
+    }
+
+    // Search for different keys
+    printf("%s --- %s\n", "the", output[Search(&trie, "the")]);
+    printf("%s --- %s\n", "these", output[Search(&trie, "these")]);
+    printf("%s --- %s\n", "their", output[Search(&trie, "their")]);
+    printf("%s --- %s\n", "thaw", output[Search(&trie, "thaw")]);
+
+    return 0;
+}
