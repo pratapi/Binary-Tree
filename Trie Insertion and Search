@@ -1,0 +1,95 @@
+// Trie data structure support Insertion and Search on lower case alphabets
+
+#include <iostream>
+#include <string>
+using namespace std;
+
+#define ALPHABET_SIZE (26)
+#define CHAR_TO_INDX(c) ((int)c - (int)'a')
+#define ARRAY_SIZE(a) (sizeof(a)/sizeof(a[0]))
+
+struct TrieNode
+{
+	int val;
+	TrieNode * children[ALPHABET_SIZE];
+};
+
+struct Trie
+{
+	int count;
+	TrieNode* root;
+};
+
+TrieNode * getNode()
+{
+	TrieNode * node = new TrieNode;
+	node->val = 0;
+	for (size_t i = 0; i < ALPHABET_SIZE; i++)
+		node->children[i] = NULL;
+
+	return node;
+}
+
+void intialization(Trie * trie)
+{
+	trie->root = getNode();
+	trie->count = 0;
+}
+
+void insert(Trie * trie, char key[])
+{
+	TrieNode * pCrawl = trie->root;
+	trie->count++;
+
+	for (size_t i = 0; i < strlen(key); i++)
+	{
+		int indx = CHAR_TO_INDX(key[i]);
+		if (!pCrawl->children[indx])
+			pCrawl->children[indx] = getNode();
+		
+		pCrawl = pCrawl->children[indx];
+	}
+
+	pCrawl->val = trie->count;
+}
+
+int search(Trie * trie, char key[])
+{
+	TrieNode * pCrawl = trie->root;
+
+	for (size_t i = 0; i < strlen(key); i++)
+	{
+		int indx = CHAR_TO_INDX(key[i]);
+		if (!pCrawl->children[indx])
+		{
+			return 0;
+		}
+		pCrawl = pCrawl->children[indx];
+	}
+
+	return (0 != pCrawl && pCrawl->val);
+}
+
+// Driver
+int main()
+{
+	// Input keys (use only 'a' through 'z' and lower case)
+	char keys[][8] = { "the", "a", "there", "answer", "any", "by", "bye", "their" };
+	Trie trie;
+
+	intialization(&trie);
+
+	// Construct trie
+	for (int i = 0; i < ARRAY_SIZE(keys); i++)
+	{
+		insert(&trie, keys[i]);
+	}
+
+	// Search for different keys
+	printf_s("the : %s \n", (search(&trie, "the")) ? "found" : "not found");
+	printf_s("these : %s \n", (search(&trie, "these")) ? "found" : "not found");
+	printf_s("thaw : %s \n", (search(&trie, "thaw")) ? "found" : "not found");
+	printf_s("answer : %s \n", (search(&trie, "answer")) ? "found" : "not found");
+
+	return 0;
+}
